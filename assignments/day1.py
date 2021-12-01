@@ -16,21 +16,11 @@ def day1():
 def part1():
     file = open(os.path.join(sys.path[0], "inputs/input_day1.txt"), "r")
 
-    count = 0
-    for prev, next in pairwise(map(int, file)):
-        if next > prev:
-            count += 1
-
-    print(count)
+    print(sum(map(lambda pair: 1 if pair[0] < pair[1] else 0, pairwise(map(int, file)))))
 
 
 def part2():
     file = open(os.path.join(sys.path[0], "inputs/input_day1.txt"), "r")
 
-    count = 0
-    for prev_window, next_window in pairwise(sliding_window(map(int, file), 3)):
-        if sum(list(next_window)) > sum(list(prev_window)):
-            count += 1
-
-    print(count)
+    print(sum(map(lambda pair: 1 if pair[0] < pair[1] else 0, pairwise(map(sum, sliding_window(map(int, file), 3))))))
 
