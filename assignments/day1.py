@@ -17,8 +17,8 @@ def part1():
     file = open(os.path.join(sys.path[0], "inputs/input_day1.txt"), "r")
 
     count = 0
-    for prev, next in pairwise(file):
-        if int(next) > int(prev):
+    for prev, next in pairwise(map(int, file)):
+        if next > prev:
             count += 1
 
     print(count)
