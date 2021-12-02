@@ -1,4 +1,4 @@
-from tools import timing
+from timing import timing
 import os
 import sys
 from more_itertools import pairwise

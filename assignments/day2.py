@@ -1,4 +1,4 @@
-from tools import timing
+from timing import timing
 import os
 import sys
 from functools import reduce
@@ -14,10 +14,10 @@ def both_parts():
 
 
 def part1():
-    #one liner
     print(reduce(mul, reduce(lambda posdep, com: map(lambda pair: pair[0] + (pair[1] * int(com[1])), zip(posdep, {"forward": [1, 0], "up": [0, -1], "down": [0, 1]}[com[0]])), map(lambda line: line.split(" "), open(os.path.join(sys.path[0], "inputs/input_day2.txt"), "r")), [0, 0])))
 
-    #initial solution
+
+def part1_initial_solution():
     file = open(os.path.join(sys.path[0], "inputs/input_day2.txt"), "r")
 
     position = 0
@@ -35,10 +35,10 @@ def part1():
 
 
 def part2():
-    #one liner
     print(reduce(mul, reduce(lambda posdepaim, com: list(map(lambda triple: triple[0] + (triple[1] * triple[2] * int(com[1])), zip(posdepaim, [1, posdepaim[2], 1], {"forward": [1, 1, 0], "up": [0, 0, -1], "down": [0, 0, 1]}[com[0]]))), map(lambda line: line.split(" "), open(os.path.join(sys.path[0], "inputs/input_day2.txt"), "r")), [0, 0, 0])[:-1]))
 
-    #initial solution
+
+def part2_initial_solution():
     file = open(os.path.join(sys.path[0], "inputs/input_day2.txt"), "r")
 
     position = 0
