@@ -1,20 +1,21 @@
-from tools import timing
-from assignments import day1
-from assignments import day2
-from assignments import day3
+import os
+import re
+import timing
 
-timing.log("*** Starting day 1! ***")
+if __name__ == '__main__':
+    timing.log("Starting to run all days!")
 
-day1.day1()
+    file_regex = re.compile('^day([0-9]*).py$')
+    filenames = next(os.walk(os.path.dirname(__file__) + "/assignments"), (None, None, []))[2]
+    day_numbers = map(lambda matched_file: int(matched_file.group(1)), filter(None, map(lambda file_name: file_regex.match(file_name), filenames)))
 
-timing.log("*** Day 1 finished! ***")
-timing.log("*** Starting day 2! ***")
+    for day in map(str, sorted(day_numbers)):
+        timing.log("*** Starting day {0}! ***".format(day))
 
-day2.day2()
+        import_name = "day" + day
+        imported = getattr(__import__("assignments", fromlist=[import_name]), import_name)
+        imported.both_parts()
 
-timing.log("*** Day 2 finished! ***")
-timing.log("*** Starting day 3! ***")
+        timing.log("*** Day {0} finished! ***".format(day))
 
-day3.day3()
-
-timing.log("*** Day 3 finished! ***")
+    timing.log("Finished running all days!")

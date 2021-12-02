@@ -5,7 +5,7 @@ from more_itertools import pairwise
 from more_itertools import sliding_window
 
 
-def day1():
+def both_parts():
     part1()
 
     timing.log("Part 1 finished!")

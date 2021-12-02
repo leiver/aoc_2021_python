@@ -2,7 +2,7 @@ from tools import timing
 import os
 import sys
 
-def day3():
+def both_parts():
     part1()
 
     timing.log("Part 1 finished!")

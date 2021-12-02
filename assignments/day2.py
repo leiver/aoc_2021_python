@@ -5,7 +5,7 @@ from functools import reduce
 from operator import mul
 
 
-def day2():
+def both_parts():
     part1()
 
     timing.log("Part 1 finished!")
