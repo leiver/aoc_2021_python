@@ -1,6 +1,7 @@
 from tools import timing
 from assignments import day1
 from assignments import day2
+from assignments import day3
 
 timing.log("*** Starting day 1! ***")
 
@@ -12,3 +13,8 @@ timing.log("*** Starting day 2! ***")
 day2.day2()
 
 timing.log("*** Day 2 finished! ***")
+timing.log("*** Starting day 3! ***")
+
+day3.day3()
+
+timing.log("*** Day 3 finished! ***")
