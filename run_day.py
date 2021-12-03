@@ -9,6 +9,12 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2 and sys.argv[1].isnumeric() and sys.argv[1] in day_numbers:
         import_name = "day" + sys.argv[1]
         imported = getattr(__import__("assignments", fromlist=[import_name]), import_name)
-        imported.both_parts()
+
+        if len(sys.argv) >= 3 and sys.argv[2] == "1":
+            imported.part1()
+        elif len(sys.argv) >= 3 and sys.argv[2] == "2":
+            imported.part2()
+        else:
+            imported.both_parts()
     else:
         print("First argument needs to be a valid day number with a corresponding script under assignments/day<#>.py")

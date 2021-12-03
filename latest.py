@@ -10,5 +10,10 @@ if __name__ == '__main__':
     if day:
         import_name = "day" + str(day)
         imported = getattr(__import__("assignments", fromlist=[import_name]), import_name)
-        imported.both_parts()
+        if len(sys.argv) >= 2 and sys.argv[1] == "1":
+            imported.part1()
+        elif len(sys.argv) >= 2 and sys.argv[1] == "2":
+            imported.part2()
+        else:
+            imported.both_parts()
 
