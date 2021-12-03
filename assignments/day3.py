@@ -1,11 +1,7 @@
-import math
-
 from timing import timing
 import os
 import sys
 import numpy
-from operator import add
-from functools import reduce
 
 def both_parts():
     part1()
@@ -18,61 +14,40 @@ def both_parts():
 def part1():
     file = open(os.path.join(sys.path[0], "inputs/input_day3.txt"), "r")
 
-    counts = reduce(add, list(map(lambda linje: numpy.array(list(map(int, list(linje.strip() + "1")))), file.readlines())))
+    numbers = get_binary_array_from_file(file)
 
-    total_lines = counts[len(counts)-1]
-    most_common = ""
-    least_common = ""
-    for count in counts[:-1]:
-        common_bit = min(max(count - int(total_lines/2), 0), 1)
-        most_common += str(common_bit)
-        least_common += str((common_bit + 1) % 2)
+    (least_common, most_common) = least_and_most_common(sum(numbers), len(numbers))
 
-    print(int(most_common, 2) * int(least_common, 2))
+    print(binary_array_to_decimal_number(least_common) * binary_array_to_decimal_number(most_common))
 
 
 def part2():
     file = open(os.path.join(sys.path[0], "inputs/input_day3.txt"), "r")
 
-
-    numbers = list(map(lambda linje: numpy.array(list(map(int, list(linje.strip())))), file.readlines()))
-
-    oxygen_numbers = numbers.copy()
-    co2_numbers = numbers.copy()
+    oxygen_numbers = get_binary_array_from_file(file)
+    co2_numbers = oxygen_numbers.copy()
     for i in range(len(oxygen_numbers[0])):
-        new_oxygen = []
-        new_co2 = []
-
         if len(oxygen_numbers) > 1:
-            (least_common, most_common) = most_and_least_common(oxygen_numbers)
-            for oxygen_candidate in oxygen_numbers:
-                if oxygen_candidate[i] == most_common[i]:
-                    new_oxygen.append(oxygen_candidate)
-
-            oxygen_numbers = new_oxygen
+            (_, most_common) = least_and_most_common(sum(oxygen_numbers), len(oxygen_numbers))
+            oxygen_numbers = list(filter(lambda candidate: candidate[i] == most_common[i], oxygen_numbers))
 
         if len(co2_numbers) > 1:
-            (least_common, most_common) = most_and_least_common(co2_numbers)
-            for co2_candidate in co2_numbers:
-                if co2_candidate[i] == least_common[i]:
-                    new_co2.append(co2_candidate)
+            (least_common, _) = least_and_most_common(sum(co2_numbers), len(co2_numbers))
+            co2_numbers = list(filter(lambda candidate: candidate[i] == least_common[i], co2_numbers))
 
-            co2_numbers = new_co2
-
-    print(int(''.join([str(x) for x in oxygen_numbers[0]]), 2) * int(''.join([str(x) for x in co2_numbers[0]]), 2))
+    print(binary_array_to_decimal_number(oxygen_numbers[0]) * binary_array_to_decimal_number(co2_numbers[0]))
 
 
-def most_and_least_common(numbers):
-    counts = reduce(add, list(map(lambda number_list: numpy.append(number_list, [[1]]), numbers)))
+def least_and_most_common(counts, total_numbers):
+    most_common = [numpy.clip(count - (int(total_numbers / 2) - ((total_numbers + 1) % 2)), 0, 1) for count in counts]
+    least_common = [(bin_num + 1) % 2 for bin_num in most_common]
 
-    total_lines = counts[len(counts)-1]
-    most_common = []
-    least_common = []
-    for count in counts[:-1]:
-        if total_lines % 2 == 0 and count == total_lines / 2:
-            common_bit = 1
-        else:
-            common_bit = min(max(count - int(total_lines / 2), 0), 1)
-        most_common.append(common_bit)
-        least_common.append((common_bit + 1) % 2)
     return least_common, most_common
+
+
+def binary_array_to_decimal_number(binary_array):
+    return int(''.join([str(x) for x in binary_array]), 2)
+
+
+def get_binary_array_from_file(file):
+    return [numpy.array([int(binary) for binary in line.strip()]) for line in file.readlines()]
