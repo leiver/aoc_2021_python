@@ -27,7 +27,7 @@ def both_parts_in_one():
     for line in file.readlines():
         line = line.strip()
         if line:
-            row = [{bingo_numbers[number]: number} if number in bingo_numbers else {"-1": } for number in line.split()]
+            row = [{bingo_numbers[number]: number} if number in bingo_numbers else {"-1"} for number in line.split()]
             current_first_bingo_on_board = update_first_bingo_on_board(current_first_bingo_on_board, row)
             current_bingo_board.append(row)
         else:
