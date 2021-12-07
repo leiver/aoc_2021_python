@@ -26,24 +26,32 @@ def part1():
 def part2():
     positions = get_positions_from_file()
 
+    # start looking for the optimal position from the mean of the input data
     current_pos = int(mean(positions))
     prev_pos = current_pos
     step = 1
+    # starts by looking left of the mean
     direction = -1
     while True:
         current_sum = find_sum_distances_increasing(positions, current_pos)
         if not is_neighbor_less_than_current(current_pos, current_sum, direction, positions):
             if not is_neighbor_less_than_current(current_pos, current_sum, direction * -1, positions):
+                # both neighbors are larger than the current sum, so we are at the optimal position
                 result = current_sum
                 break
             elif step > 1:
+                # in this case we have passed the optimal position
+                # we need to do a binary search from the last searched position to the current position to find the actual optimal position
                 result = binary_search_sums(positions, range(min(current_pos, prev_pos), max(current_pos, prev_pos) + 1))
                 break
             else:
+                # in this case the right side is less then the current sum and we are still at the mean position (step == 1)
+                # flip the starting direction to traverse right
                 direction = 1
 
         prev_pos = current_pos
         current_pos += step * direction
+        # step doubles each time so we expand how much we search at a time for each iteration.
         step *= 2
 
     print(result)
