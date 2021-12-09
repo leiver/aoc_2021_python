@@ -1,5 +1,6 @@
 import sys, os
 import re
+from timing import timing
 
 if __name__ == '__main__':
     file_regex = re.compile('^day([0-9]*).py$')
@@ -10,11 +11,15 @@ if __name__ == '__main__':
         import_name = "day" + sys.argv[1]
         imported = getattr(__import__("assignments", fromlist=[import_name]), import_name)
 
+        timing.log("*** Starting day {0}! ***".format(sys.argv[1]))
+
         if len(sys.argv) >= 3 and sys.argv[2] == "1":
             imported.part1()
         elif len(sys.argv) >= 3 and sys.argv[2] == "2":
             imported.part2()
         else:
             imported.both_parts()
+
+        timing.log("*** Day {0} finished! ***".format(sys.argv[1]))
     else:
         print("First argument needs to be a valid day number with a corresponding script under assignments/day<#>.py")

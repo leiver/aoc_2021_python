@@ -12,11 +12,13 @@ def seconds_to_str(t):
 
 
 def log(s, elapsed=None):
+    global last
     print(line)
     print(now(), '-', s)
+    end = perf_counter()
     if not elapsed:
-        end = perf_counter()
-        elapsed = seconds_to_str(end-start)
+        elapsed = seconds_to_str(end-last)
+    last = end
     print("Elapsed time:", elapsed)
     print(line)
 
@@ -32,5 +34,6 @@ def now():
 
 
 start = perf_counter()
+last = start
 atexit.register(end_log)
 log("Start Program")
