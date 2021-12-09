@@ -2,11 +2,7 @@ from timing import timing
 import os
 import sys
 from numpy import add
-from numpy import array
 from numpy import prod
-from functools import reduce
-from queue import SimpleQueue
-from itertools import chain
 
 directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
