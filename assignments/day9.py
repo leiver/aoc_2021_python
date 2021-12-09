@@ -4,6 +4,9 @@ import sys
 from numpy import add
 from numpy import array
 from numpy import prod
+from functools import reduce
+from queue import SimpleQueue
+from itertools import chain
 
 directions = [(-1, 0), (0, -1), (1, 0), (0, 1)]
 
@@ -19,18 +22,7 @@ def both_parts():
 def part1():
     cave_map = get_cave_map_from_file()
 
-    lowest_points = 0
-    for coords, value in cave_map.items():
-        lower_neighbor_found = False
-        for direction in directions:
-            neighbor_coords = tuple(add(coords, direction))
-            if neighbor_coords in cave_map and cave_map[neighbor_coords] <= value:
-                lower_neighbor_found = True
-                break
-        if not lower_neighbor_found:
-            lowest_points += 1 + value
-
-    print(lowest_points)
+    print(sum([(1 + value) * int(all([cave_map.get(neighbor, 10) > value for neighbor in [tuple(add(coords, direction)) for direction in directions]])) for coords, value in cave_map.items()]))
 
 
 def part2():
@@ -39,27 +31,19 @@ def part2():
     basins = []
     coords_to_basins = {}
     for coords, value in cave_map.items():
-        if value != 9:
-            for direction in directions:
-                neighbor_coords = tuple(add(coords, direction))
-                if neighbor_coords in cave_map and cave_map[neighbor_coords] != 9:
-                    if neighbor_coords in coords_to_basins:
-                        if coords not in coords_to_basins:
-                            basin = coords_to_basins[neighbor_coords]
-                            basins[basin].append(coords)
-                            coords_to_basins[coords] = basin
-                        elif coords_to_basins[neighbor_coords] != coords_to_basins[coords]:
-                            basin = coords_to_basins[coords]
-                            neighbor_basin = coords_to_basins[neighbor_coords]
-                            basins[basin].extend(basins[neighbor_basin])
-                            for neighbor_basin_coord in basins[neighbor_basin]:
-                                coords_to_basins[neighbor_basin_coord] = basin
-                            basins[neighbor_basin] = []
-                    elif coords not in coords_to_basins:
-                        coords_to_basins[coords] = len(basins)
-                        basins.append([coords])
+        if value != 9 and coords not in coords_to_basins:
+            basins.append(map_whole_basin(cave_map, coords_to_basins, coords, len(basins)))
 
     print(prod(list(sorted(map(len, basins), reverse=True))[:3]))
+
+
+def map_whole_basin(cave_map, coords_to_basin, current_coord, basin_number):
+    coords_to_basin.update({current_coord: basin_number})
+    basin = [current_coord]
+    for neighbor in [tuple(add(current_coord, direction)) for direction in directions]:
+        if cave_map.get(neighbor, 9) < 9 and neighbor not in coords_to_basin:
+            basin += map_whole_basin(cave_map, coords_to_basin, neighbor, basin_number)
+    return basin
 
 
 def get_cave_map_from_file():
