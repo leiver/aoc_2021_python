@@ -3,10 +3,11 @@ import os
 import sys
 from collections import deque
 from statistics import median
+from functools import reduce
 
 bracket_map = {"(": ")", "[": "]", "{": "}", "<": ">"}
 bracket_scores_corrupt = {")": 3, "]": 57, "}": 1197, ">": 25137}
-bracket_scores_incomplete = {")": 1, "]": 2, "}": 3, ">": 4}
+bracket_scores_incomplete = {"(": 1, "[": 2, "{": 3, "<": 4}
 
 
 def both_parts():
@@ -16,7 +17,6 @@ def both_parts():
     for line in file:
         stack = deque()
         corrupt = False
-        incomplete_score = 0
         for bracket in line.strip():
             if bracket in bracket_map.keys():
                 stack.append(bracket)
@@ -28,10 +28,7 @@ def both_parts():
                     break
 
         if not corrupt and len(stack) > 0:
-            while len(stack) > 0:
-                missing_bracket = bracket_map[stack.pop()]
-                incomplete_score = (incomplete_score * 5) + bracket_scores_incomplete[missing_bracket]
-            incomplete_scores.append(incomplete_score)
+            incomplete_scores.append(reduce(lambda score, next_bracket: (score * 5) + bracket_scores_incomplete[next_bracket], reversed(stack), 0))
 
     print(corrupt_score)
 
