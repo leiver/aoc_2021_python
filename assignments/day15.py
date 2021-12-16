@@ -25,12 +25,20 @@ def part1():
 
 
 def part2():
+    risks, max_x, max_y = scale_input(5)
+
+    lowest_risk, paths = find_shortest_path_a_star(risks, max_x, max_y)
+
+    print(lowest_risk)
+
+
+def scale_input(scale):
     risks, initial_max_x, initial_max_y = initialize_risks_from_file()
     initial_max_x = initial_max_x + 1
     initial_max_y = initial_max_y + 1
 
-    for tile_x in range(5):
-        for tile_y in range(5):
+    for tile_x in range(scale):
+        for tile_y in range(scale):
             if tile_x != 0 or tile_y != 0:
                 if tile_x - 1 >= 0:
                     neighbor_x = tile_x - 1
@@ -44,11 +52,10 @@ def part2():
                         risks[(x + (initial_max_x * tile_x), y + (initial_max_y * tile_y))] = \
                             (risks[(x + (initial_max_x * neighbor_x), y + (initial_max_y * neighbor_y))] % 9) + 1
 
-    new_max_x = (initial_max_x * 5) - 1
-    new_max_y = (initial_max_y * 5) - 1
-    lowest_risk, paths = find_shortest_path_a_star(risks, new_max_x, new_max_y)
+    new_max_x = (initial_max_x * scale) - 1
+    new_max_y = (initial_max_y * scale) - 1
 
-    print(lowest_risk)
+    return risks, new_max_x, new_max_y
 
 
 def initialize_risks_from_file():
