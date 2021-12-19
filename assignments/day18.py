@@ -45,6 +45,7 @@ def part2():
 
     print(largest_snail_sum)
 
+
 def sum_numbers_in_pair(snail_pair):
     result = 0
     if isinstance(snail_pair.left, SnailPair):
@@ -170,8 +171,6 @@ def parse_snail_pair(parent, line, level=0):
         line = line[1:]
 
     return pair, line[1:]
-
-
 
 
 class SnailPair:
