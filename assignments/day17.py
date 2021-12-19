@@ -43,13 +43,12 @@ def part2():
     unique_velocity_combinations = set()
     for step in range(1, max_steps_y + 2):
 
-        valid_x_velocities_for_step = []
-        for x_velocity in range(max_steps_x, x_max + 1):
-            x_after_steps = sum(range(max(1, x_velocity - step + 1), x_velocity + 1))
-            if x_min <= x_after_steps <= x_max:
-                valid_x_velocities_for_step.append(x_velocity)
-            elif x_after_steps > x_max:
-                break
+        if step > max_steps_x:
+            valid_x_velocities_for_step = [max_steps_x]
+        else:
+            min_valid_x_velocity_for_step = int((x_min + ((step * (step + 1)) / 2) - 1) / step)
+            max_valid_x_velocity_for_step = int((x_max + ((step * (step + 1)) / 2) - step) / step)
+            valid_x_velocities_for_step = list(range(min_valid_x_velocity_for_step, max_valid_x_velocity_for_step+1))
 
         valid_y_velocities_for_step = []
         for y_velocity in range(y_min, max_y_velocity + 1):
