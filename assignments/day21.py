@@ -82,11 +82,11 @@ def part2():
     print(max(player_1_winning_timelines, player_2_winning_timelines))
 
 
-def initialize_player(startin_position):
+def initialize_player(starting_position):
     return [
         {
             "positions": {
-                startin_position: {
+                starting_position: {
                     0: 1
                 }
             },
